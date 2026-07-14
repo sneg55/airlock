@@ -1,0 +1,48 @@
+edition: 3.0.0
+name: airlock-mcp-read
+access: ${env('SERVERLESS_DEVS_ACCESS')}
+resources:
+  mcp_read:
+    component: fc3
+    props:
+      region: ${env('AIRLOCK_REGION')}
+      functionName: ${env('FC_READ_FUNCTION_NAME')}
+      description: Airlock read-only Alibaba Cloud Ops MCP server
+      runtime: custom-container
+      role: ${env('FC_EXECUTION_ROLE_ARN')}
+      timeout: 3600
+      instanceConcurrency: 1
+      cpu: 1
+      memorySize: 2048
+      diskSize: 512
+      environmentVariables:
+        ALIBABA_CLOUD_ACCESS_KEY_ID: ${env('MCP_READ_ACCESS_KEY_ID')}
+        ALIBABA_CLOUD_ACCESS_KEY_SECRET: ${env('MCP_READ_ACCESS_KEY_SECRET')}
+      customContainerConfig:
+        image: ${env('MCP_CONTAINER_IMAGE')}
+        port: 9000
+        entrypoint:
+          - alibaba-cloud-ops-mcp-server
+        command:
+          - --transport
+          - sse
+          - --host
+          - 0.0.0.0
+          - --port
+          - "9000"
+          - --env
+          - international
+          - --services
+          - ecs,cms
+          - --visible-tools
+          - ${env('MCP_VISIBLE_TOOLS')}
+      triggers:
+        - triggerName: airlock-mcp-read-http
+          triggerType: http
+          qualifier: LATEST
+          triggerConfig:
+            authType: anonymous
+            disableURLInternet: false
+            methods:
+              - GET
+              - POST

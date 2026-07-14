@@ -1,0 +1,45 @@
+# Secrets and credentials
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+credentials.json
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.egg-info/
+dist/
+build/
+
+# Node (if any tooling/frontend is added)
+node_modules/
+npm-debug.log*
+
+# OS / editor
+.DS_Store
+*.log
+.idea/
+.vscode/
+
+# Agent harness (local signal; committed reflections are shared)
+.harness/ledger.jsonl
+
+# Personal, machine-local instructions
+CLAUDE.local.md
+
+# Local checkpoint state and keys (private signing key, SQLite approval store)
+.airlock/
+
+# Next.js (web/ approval app)
+web/.next/
+web/out/
+.next/
+out/

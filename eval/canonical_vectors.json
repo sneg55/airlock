@@ -1,0 +1,18 @@
+[
+  {
+    "name": "key ordering",
+    "input": "{\"z\":1,\"a\":2}",
+    "expected_hex": "7b2261223a322c227a223a317d"
+  },
+  {
+    "name": "unicode",
+    "input": "{\"text\":\"€\\u000f\\nA'B\\\"\\\\/\"}",
+    "expected_hex": "7b2274657874223a22e282ac5c75303030665c6e4127425c225c5c2f227d"
+  },
+  {
+    "name": "number normalization",
+    "input": "{\"a\":1.0,\"b\":1e-7,\"c\":1e+21,\"d\":0.000001}",
+    "expected_hex": "7b2261223a312c2262223a31652d372c2263223a31652b32312c2264223a302e3030303030317d"
+  }
+]
+

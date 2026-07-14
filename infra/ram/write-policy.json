@@ -1,0 +1,20 @@
+{
+  "Version": "1",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "ecs:StopInstances",
+        "ecs:DeleteInstances"
+      ],
+      "Resource": "acs:ecs:ap-southeast-1:*:instance/*"
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "rds:StopDBInstance"
+      ],
+      "Resource": "acs:rds:ap-southeast-1:*:dbinstance/*"
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "typeCheckingMode": "strict",
+  "pythonVersion": "3.11",
+  "include": ["src", "tests"],
+  "exclude": ["**/__pycache__", ".venv", "**/node_modules"],
+  "venvPath": ".",
+  "venv": ".venv",
+  "reportMissingImports": "error",
+  "reportMissingTypeStubs": "warning",
+  "reportUnnecessaryTypeIgnoreComment": "error",
+  "reportImplicitOverride": "warning"
+}

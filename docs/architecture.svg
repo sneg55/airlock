@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1040" height="900" viewBox="0 0 1040 900" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Inter, Roboto, system-ui, sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#64748b"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1040" height="900" fill="#ffffff"/>
+
+  <!-- Title -->
+  <text x="520" y="46" text-anchor="middle" font-size="23" font-weight="700" fill="#0f1729">Airlock: a capability-separated approval gate</text>
+  <text x="520" y="72" text-anchor="middle" font-size="14" fill="#5b6678">The planner can only look and propose. Only the executor writes, and only what a human already signed.</text>
+
+  <!-- Cloud -->
+  <rect x="360" y="96" width="320" height="54" rx="14" fill="#eef2f7" stroke="#cbd5e1"/>
+  <text x="520" y="119" text-anchor="middle" font-size="14" font-weight="700" fill="#0f1729">Your Alibaba Cloud account</text>
+  <text x="520" y="138" text-anchor="middle" font-size="12.5" fill="#5b6678">ECS + RDS instances</text>
+
+  <!-- READ band -->
+  <rect x="40" y="168" width="960" height="264" rx="18" fill="#eef4ff" stroke="#b9d0f7" stroke-width="1.5" stroke-dasharray="6 5"/>
+  <text x="62" y="196" font-size="12" font-weight="700" letter-spacing="0.08em" fill="#2563eb">READ CAPABILITY · read RAM credential</text>
+
+  <rect x="290" y="212" width="460" height="56" rx="12" fill="#ffffff" stroke="#e2e8f0"/>
+  <text x="520" y="235" text-anchor="middle" font-size="14" font-weight="700" fill="#0f1729">Read MCP server</text>
+  <text x="520" y="254" text-anchor="middle" font-size="12" fill="#5b6678">CommonAPICaller + CMS_GetMetricList</text>
+
+  <rect x="290" y="286" width="460" height="56" rx="12" fill="#ffffff" stroke="#e2e8f0"/>
+  <text x="520" y="309" text-anchor="middle" font-size="14" font-weight="700" fill="#0f1729">airlock agent</text>
+  <text x="520" y="328" text-anchor="middle" font-size="12" fill="#5b6678">discover + deterministic idle policy</text>
+
+  <rect x="290" y="360" width="460" height="60" rx="12" fill="#ffffff" stroke="#e2e8f0"/>
+  <text x="520" y="383" text-anchor="middle" font-size="14" font-weight="700" fill="#0f1729">Qwen planner + multi-vendor jury</text>
+  <text x="520" y="402" text-anchor="middle" font-size="11.5" fill="#5b6678">qwen3.7-max · deepseek-v4-pro · glm-5.1  (Qwen Cloud)</text>
+
+  <!-- SIGN band -->
+  <rect x="40" y="460" width="960" height="100" rx="18" fill="#f4effc" stroke="#d6c6f2" stroke-width="1.5" stroke-dasharray="6 5"/>
+  <text x="62" y="488" font-size="12" font-weight="700" letter-spacing="0.08em" fill="#7c3aed">SIGN CAPABILITY · Ed25519 private key</text>
+
+  <rect x="290" y="496" width="460" height="52" rx="12" fill="#ffffff" stroke="#e2e8f0"/>
+  <text x="520" y="518" text-anchor="middle" font-size="14" font-weight="700" fill="#0f1729">checkpoint</text>
+  <text x="520" y="536" text-anchor="middle" font-size="12" fill="#5b6678">JCS canonicalize + hash + Ed25519 sign</text>
+
+  <rect x="770" y="496" width="210" height="24" rx="8" fill="#ffffff" stroke="#e2e8f0"/>
+  <text x="875" y="512" text-anchor="middle" font-size="11.5" font-weight="600" fill="#0f1729">operator · web app</text>
+  <rect x="770" y="524" width="210" height="24" rx="8" fill="#ffffff" stroke="#e2e8f0"/>
+  <text x="875" y="540" text-anchor="middle" font-size="11.5" font-weight="600" fill="#0f1729">approval store</text>
+
+  <!-- WRITE band -->
+  <rect x="40" y="588" width="960" height="176" rx="18" fill="#fff3ec" stroke="#f4c3a3" stroke-width="1.5" stroke-dasharray="6 5"/>
+  <text x="62" y="616" font-size="12" font-weight="700" letter-spacing="0.08em" fill="#c2410c">WRITE CAPABILITY · write RAM credential + public key only</text>
+
+  <rect x="290" y="632" width="460" height="58" rx="12" fill="#ffffff" stroke="#e2e8f0"/>
+  <text x="520" y="655" text-anchor="middle" font-size="14" font-weight="700" fill="#0f1729">airlock executor</text>
+  <text x="520" y="674" text-anchor="middle" font-size="11.5" fill="#5b6678">verify sig · re-hash · re-read state · reconstruct args</text>
+
+  <rect x="290" y="706" width="460" height="46" rx="12" fill="#ffffff" stroke="#e2e8f0"/>
+  <text x="520" y="726" text-anchor="middle" font-size="14" font-weight="700" fill="#0f1729">Write MCP server</text>
+  <text x="520" y="743" text-anchor="middle" font-size="11.5" fill="#5b6678">Stop / Delete only</text>
+
+  <!-- Flow arrows (centerline) -->
+  <line x1="520" y1="150" x2="520" y2="210" stroke="#64748b" stroke-width="1.6" marker-end="url(#arrow)"/>
+  <text x="532" y="186" font-size="11.5" fill="#5b6678">metrics + state</text>
+
+  <line x1="520" y1="268" x2="520" y2="284" stroke="#64748b" stroke-width="1.6" marker-end="url(#arrow)"/>
+  <line x1="520" y1="342" x2="520" y2="358" stroke="#64748b" stroke-width="1.6" marker-end="url(#arrow)"/>
+  <text x="532" y="356" font-size="11.5" fill="#5b6678">evidence</text>
+
+  <line x1="520" y1="420" x2="520" y2="494" stroke="#64748b" stroke-width="1.6" marker-end="url(#arrow)"/>
+  <text x="532" y="460" font-size="11.5" fill="#5b6678">scored proposal</text>
+
+  <line x1="520" y1="548" x2="520" y2="630" stroke="#64748b" stroke-width="1.6" marker-end="url(#arrow)"/>
+  <text x="532" y="594" font-size="11.5" fill="#5b6678">issued Ed25519 approval (single-use)</text>
+
+  <line x1="520" y1="690" x2="520" y2="704" stroke="#64748b" stroke-width="1.6" marker-end="url(#arrow)"/>
+  <text x="532" y="702" font-size="11.5" fill="#5b6678">verified write</text>
+
+  <!-- operator approve -->
+  <line x1="770" y1="510" x2="752" y2="516" stroke="#7c3aed" stroke-width="1.6" marker-end="url(#arrow)"/>
+  <text x="762" y="484" text-anchor="end" font-size="11" fill="#7c3aed">approve (type-to-confirm)</text>
+
+  <!-- Return arrow: Write MCP -> Cloud -->
+  <path d="M750,724 L1012,724 L1012,123 L682,123" fill="none" stroke="#64748b" stroke-width="1.6" marker-end="url(#arrow)"/>
+  <text x="1004" y="430" text-anchor="end" font-size="11.5" fill="#5b6678" transform="rotate(-90 1004 430)">Stop / Delete on ECS / RDS</text>
+
+  <!-- Caption -->
+  <text x="520" y="800" text-anchor="middle" font-size="13" fill="#0f1729" font-weight="600">Capability separation, not prompt filtering.</text>
+  <text x="520" y="822" text-anchor="middle" font-size="12.5" fill="#5b6678">Change any signed field and the re-hash no longer matches, so the write is refused. Replay the same approval and it is refused.</text>
+  <text x="520" y="844" text-anchor="middle" font-size="12.5" fill="#5b6678">An approval authorizes exactly one action against exactly one target, once.</text>
+</svg>

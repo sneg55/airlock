@@ -1,0 +1,44 @@
+# Airlock fork overlay for alibaba-cloud-ops-mcp-server 0.9.27.
+#
+# NOT a standalone module. This fragment is APPENDED to the installed `cms_tools.py` at
+# image-build time (see infra/mcp/Dockerfile), so it reuses that module's already-imported
+# names: `tools`, `Field`, `List`, `json`, `create_client`, and `cms_20190101_models`.
+# The `.py.in` extension keeps linters from checking it out of context.
+#
+# Why this exists: the upstream named CMS tools (CMS_GetCpuUsageData, ...) call
+# DescribeMetricLast and return only the latest datapoint. Airlock's idle policy needs a
+# windowed time-series (24 samples over 14 days), and the generic CommonAPICaller cannot
+# reach the CloudMonitor metrics endpoint (it routes cms -> cms.{region}, not
+# metrics.{region}). This adds one read-only windowed-metric tool that calls
+# DescribeMetricList against the correct endpoint via this module's create_client.
+#
+# Read-only: it maps to RAM action cms:DescribeMetricList. It is only registered on the
+# read server (it must be listed in that server's --visible-tools); the write server never
+# whitelists it, so appending it to the shared image is inert there.
+
+
+@tools.append
+def CMS_GetMetricList(
+    MetricName: str = Field(description='CloudMonitor metric name, e.g. cpu_total'),
+    InstanceIds: List[str] = Field(description='AlibabaCloud ECS instance ID List'),
+    StartTime: str = Field(description='Window start, epoch millis or ISO8601'),
+    EndTime: str = Field(description='Window end, epoch millis or ISO8601'),
+    RegionId: str = Field(description='AlibabaCloud region ID', default='cn-hangzhou'),
+    Period: str = Field(description='Sample period in seconds', default='3600'),
+    Namespace: str = Field(description='CloudMonitor namespace', default='acs_ecs_dashboard'),
+):
+    """获取ECS实例在时间窗口内的监控指标时间序列 (windowed CloudMonitor time-series)."""
+    client = create_client(RegionId)
+    dimensions = json.dumps([{'instanceId': instance_id} for instance_id in InstanceIds])
+    request = cms_20190101_models.DescribeMetricListRequest(
+        namespace=Namespace,
+        metric_name=MetricName,
+        dimensions=dimensions,
+        start_time=StartTime,
+        end_time=EndTime,
+        period=Period,
+    )
+    resp = client.describe_metric_list(request)
+    # CMS returns Datapoints as a JSON-encoded string; pass it through unchanged so the
+    # read client parses one canonical shape.
+    return {'Datapoints': resp.body.datapoints}

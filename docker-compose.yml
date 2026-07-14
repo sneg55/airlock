@@ -1,0 +1,77 @@
+# Full Airlock stack, one container per capability so the read/write split is a real
+# deployment boundary. Needs cloud credentials and signing keys first:
+#   1. infra/scripts/gen-keys.sh          -> .airlock/signing.key + executor-public.pem
+#   2. infra/scripts/setup-ram.sh         -> two RAM users (read, write)
+#   3. write .airlock/read.env, write.env, write.bearer, and a root .env (see .env.example)
+# Then: docker compose up --build
+#
+# Zero-cloud alternative for a first look: see demo/README.md (no credentials needed).
+name: airlock
+
+services:
+  mcp-read:
+    build: ./infra/mcp
+    restart: unless-stopped
+    env_file: [.airlock/read.env]
+    command: [--transport, sse, --host, 0.0.0.0, --port, "9000", --env, international,
+              --services, "ecs,cms", --visible-tools, "CommonAPICaller,CMS_GetMetricList"]
+    expose: ["9000"]
+
+  mcp-write:
+    build: ./infra/mcp
+    restart: unless-stopped
+    env_file: [.airlock/write.env]
+    command: [--transport, sse, --host, 0.0.0.0, --port, "9000", --env, international,
+              --visible-tools, "ECS_StopInstances,ECS_DeleteInstances,RDS_StopDBInstance"]
+    expose: ["9000"]
+
+  checkpoint:
+    build: .
+    restart: unless-stopped
+    command: [checkpoint, --host, 0.0.0.0, --port, "8000"]
+    env_file: [.env]
+    environment:
+      SIGNING_KEY_PATH: /keys/signing.key
+      PUBLIC_KEY_PATH: /keys/executor-public.pem
+      APPROVAL_STORE_PATH: /data/approvals.sqlite3
+    volumes:
+      - ./.airlock:/keys:ro
+      - airlock-data:/data
+    ports: ["8000:8000"]
+
+  executor:
+    build: .
+    restart: unless-stopped
+    command: [executor]
+    env_file: [.env]
+    environment:
+      PUBLIC_KEY_PATH: /keys/executor-public.pem
+      APPROVAL_STORE_PATH: /data/approvals.sqlite3
+      READ_MCP_SSE_URL: http://mcp-read:9000/sse
+      WRITE_MCP_SSE_URL: http://mcp-write:9000/sse
+    volumes:
+      - ./.airlock:/keys:ro
+      - airlock-data:/data
+    depends_on: [checkpoint, mcp-write, mcp-read]
+
+  agent:
+    build: .
+    restart: unless-stopped
+    command: [agent, --loop]
+    env_file: [.env]
+    environment:
+      CHECKPOINT_URL: http://checkpoint:8000
+      READ_MCP_SSE_URL: http://mcp-read:9000/sse
+    depends_on: [checkpoint, mcp-read]
+
+  web:
+    build: ./web
+    restart: unless-stopped
+    environment:
+      CHECKPOINT_URL: http://checkpoint:8000
+      OPERATOR_TOKEN: ${OPERATOR_TOKEN:?set OPERATOR_TOKEN in .env}
+    ports: ["3000:3000"]
+    depends_on: [checkpoint]
+
+volumes:
+  airlock-data:
