@@ -1,5 +1,12 @@
 # Airlock
 
+[![License](https://img.shields.io/github/license/sneg55/airlock)](LICENSE)
+[![Stars](https://img.shields.io/github/stars/sneg55/airlock)](https://github.com/sneg55/airlock/stargazers)
+![Python 3.13+](https://img.shields.io/badge/Python%203.13%2B-3776AB?logo=python&logoColor=fff)
+![FastAPI](https://img.shields.io/badge/FastAPI-009688?logo=fastapi&logoColor=fff)
+![Alibaba Cloud](https://img.shields.io/badge/Alibaba%20Cloud-FF6A00?logo=alibabacloud&logoColor=fff)
+![Docker](https://img.shields.io/badge/Docker-2496ED?logo=docker&logoColor=fff)
+
 **Safe autonomy for destructive cloud actions.** Airlock is an agent that finds wasteful
 cloud resources and cleans them up, but the point is not the cleanup. The point is the gate:
 every destructive action passes through a human approval the agent structurally cannot
